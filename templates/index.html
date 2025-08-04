@@ -62,7 +62,18 @@
                         
                         <div class="suffixes-info">
                             <span class="suffixes-label">Ekler:</span>
-                            {% if r.meaningful_suffixes %}
+                            {% if r.breakdown_suffixes %}
+                                <div class="suffixes-table">
+                                                                {% for suffix in r.breakdown_suffixes %}
+                            <div class="suffix-tooltip">
+                                <button class="suffix-button" title="{{ suffix.tooltip_text }}">
+                                    {{ suffix.display_text }}
+                                </button>
+                                <span class="tooltip-text">{{ suffix.tooltip_text }}</span>
+                            </div>
+                            {% endfor %}
+                                </div>
+                            {% elif r.meaningful_suffixes %}
                                 <div class="suffixes-table">
                                     {% for suffix in r.meaningful_suffixes %}
                                     <div class="suffix-tooltip">

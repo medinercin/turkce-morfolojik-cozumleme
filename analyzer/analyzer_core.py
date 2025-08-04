@@ -1,7 +1,7 @@
 import re
 import string
 from MorphologicalAnalysis.FsmMorphologicalAnalyzer import FsmMorphologicalAnalyzer
-from analyzer.suffix_meanings import get_suffix_meaning
+from analyzer.suffix_meanings import get_suffix_meaning, get_suffix_display_info
 
 morphology = FsmMorphologicalAnalyzer()
 
@@ -152,6 +152,8 @@ def get_morphological_breakdown(word, root, surface_suffix):
         ('melidir', 'meli-dir'), ('malıdır', 'malı-dır'),
         ('malıydı', 'malı-ydı'), ('meliydi', 'meli-ydi'),
         ('meliyim', 'meli-yim'), ('malıyım', 'malı-yım'),
+        ('meliyidik', 'meli-yi-di-k'), ('malıyıdık', 'malı-yı-dı-k'),
+        ('meliyiz', 'meli-yi-z'), ('malıyız', 'malı-yı-z'),
         
         # Edilgen ekleri
         ('ıl', 'ıl'), ('il', 'il'), ('ul', 'ul'), ('ül', 'ül'),
@@ -255,6 +257,21 @@ def analyze_sentence(sentence):
                 # Morfolojik ayrımı hesapla
                 morphological_breakdown = get_morphological_breakdown(token, root, surface_suffix)
                 
+                # Morfolojik ayrımı parçalara ayır ve ek anlamlarını bul
+                breakdown_suffixes = []
+                if morphological_breakdown and '-' in morphological_breakdown:
+                    parts = morphological_breakdown.split('-')
+                    if len(parts) > 1:
+                        # İlk kısım kök, geri kalanı ekler
+                        for part in parts[1:]:  # Kök hariç diğer kısımlar
+                            display_text, tooltip_text = get_suffix_display_info(part)
+                            breakdown_suffixes.append({
+                                "suffix": part,
+                                "meaning": get_suffix_meaning(part),
+                                "display_text": display_text,
+                                "tooltip_text": tooltip_text
+                            })
+                
                 # Mastar kelimeleri için özel kök türü belirleme
                 if token.endswith('mak') or token.endswith('mek'):
                     root_type = 'fiil kök'
@@ -278,7 +295,8 @@ def analyze_sentence(sentence):
                     "surface_suffix": surface_suffix,
                     "suffixes": suffix_details,
                     "meaningful_suffixes": meaningful_suffixes,
-                    "morphological_breakdown": morphological_breakdown
+                    "morphological_breakdown": morphological_breakdown,
+                    "breakdown_suffixes": breakdown_suffixes
                 })
             else:
                 results.append({
@@ -288,7 +306,8 @@ def analyze_sentence(sentence):
                     "surface_suffix": "",
                     "suffixes": [],
                     "meaningful_suffixes": [],
-                    "morphological_breakdown": ""
+                    "morphological_breakdown": "",
+                    "breakdown_suffixes": []
                 })
 
     return results
