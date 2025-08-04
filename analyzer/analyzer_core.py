@@ -122,6 +122,20 @@ def get_morphological_breakdown(word, root, surface_suffix):
     remaining_suffix = surface_suffix
     # Yaygın Türkçe ek kalıpları (uzunluk sırasına göre)
     suffix_patterns = [
+        # Yeterlilik kipi + ek eylem kombinasyonları (en uzun önce)
+        ('melidir', 'meli-dir'), ('malıdır', 'malı-dır'),
+        ('melidur', 'meli-dur'), ('malıdur', 'malı-dur'),
+        ('melidür', 'meli-dür'), ('malıdür', 'malı-dür'),
+        ('melidi', 'meli-di'), ('malıdı', 'malı-dı'),
+        ('melidu', 'meli-du'), ('malıdu', 'malı-du'),
+        ('melidü', 'meli-dü'), ('malıdü', 'malı-dü'),
+        
+        # Yeterlilik kipi + geçmiş zaman
+        ('malıydı', 'malı-ydı'), ('meliydi', 'meli-ydi'),
+        ('meliyim', 'meli-yim'), ('malıyım', 'malı-yım'),
+        ('meliyidik', 'meli-yi-di-k'), ('malıyıdık', 'malı-yı-dı-k'),
+        ('meliyiz', 'meli-yi-z'), ('malıyız', 'malı-yı-z'),
+        
         # Çoklu ekler - en uzun önce
         ('yimiz', 'yi-miz'), ('yımız', 'yı-mız'), ('yumuz', 'yu-muz'), ('yümüz', 'yü-müz'),
         ('yim', 'yi-m'), ('yım', 'yı-m'), ('yum', 'yu-m'), ('yüm', 'yü-m'),
@@ -147,13 +161,6 @@ def get_morphological_breakdown(word, root, surface_suffix):
         ('miyor', 'mi-yor'), ('mıyordu', 'mı-yor-du'),
         ('iyor', 'i-yor'), ('ıyor', 'ı-yor'), ('uyor', 'u-yor'), ('üyor', 'ü-yor'),
         ('ecek', 'e-cek'), ('acak', 'a-cak'), ('miş', 'miş'), ('mış', 'mış'), ('muş', 'muş'), ('müş', 'müş'),
-
-        # Zaman ve kip ekleri
-        ('melidir', 'meli-dir'), ('malıdır', 'malı-dır'),
-        ('malıydı', 'malı-ydı'), ('meliydi', 'meli-ydi'),
-        ('meliyim', 'meli-yim'), ('malıyım', 'malı-yım'),
-        ('meliyidik', 'meli-yi-di-k'), ('malıyıdık', 'malı-yı-dı-k'),
-        ('meliyiz', 'meli-yi-z'), ('malıyız', 'malı-yı-z'),
         
         # Edilgen ekleri
         ('ıl', 'ıl'), ('il', 'il'), ('ul', 'ul'), ('ül', 'ül'),

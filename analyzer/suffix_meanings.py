@@ -223,11 +223,11 @@ def get_suffix_display_info(suffix):
         "ten": "Ayrılma Durumu",
         "tan": "Ayrılma Durumu",
         
-        # Geniş zaman ekleri
-        "dir": "Geniş Zaman",
-        "dır": "Geniş Zaman",
-        "dur": "Geniş Zaman",
-        "dür": "Geniş Zaman"
+        # Ek eylem ekleri
+        "dir": "Ek Eylem",
+        "dır": "Ek Eylem",
+        "dur": "Ek Eylem",
+        "dür": "Ek Eylem"
     }
     
     # Çok anlamlı ekler
