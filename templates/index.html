@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Türkçe Morfolojik Çözümleyici</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Türkçe Morfolojik Çözümleyici</h1>
+            <p>Kelime köklerini ve eklerini analiz edin</p>
+        </header>
+
+        <main class="main-content">
+            <section class="input-section">
+                <form method="post" class="analysis-form">
+                    <div class="form-group">
+                        <textarea 
+                            name="sentence" 
+                            placeholder="Analiz etmek istediğiniz cümleyi yazınız..."
+                            rows="3"
+                            class="sentence-input"
+                        >{{ sentence }}</textarea>
+                    </div>
+                    <button type="submit" class="analyze-btn">
+                        <span class="btn-text">Çözümle</span>
+                    </button>
+                </form>
+            </section>
+
+            {% if result %}
+            <section class="results-section">
+                <div class="results-header">
+                    <h2>Analiz Sonuçları</h2>
+                </div>
+
+                <div class="results-grid">
+                    {% for r in result %}
+                    {% if r.root != "Noktalama İşareti" %}
+                    <article class="word-card">
+                        <div class="word-info">
+                            <span class="word-label">Kelime:</span>
+                            <span class="word-value">{{ r.word }}</span>
+                            {% if r.morphological_breakdown %}
+                            <span class="breakdown-label">Morfolojik Ayrım:</span>
+                            <span class="breakdown-value">{{ r.morphological_breakdown }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="root-info">
+                            <span class="root-label">Kök:</span>
+                            <span class="root-value">{{ r.root }}</span>
+                            {% if r.root_type %}
+                            <span class="root-type">({{ r.root_type }})</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="suffixes-info">
+                            <span class="suffixes-label">Ekler:</span>
+                            {% if r.meaningful_suffixes %}
+                                <div class="suffixes-table">
+                                    {% for suffix in r.meaningful_suffixes %}
+                                    <div class="suffix-tooltip">
+                                        <button class="suffix-button" title="{{ suffix.suffix }}">
+                                            {{ suffix.meaning }}
+                                        </button>
+                                        <span class="tooltip-text">-{{ suffix.suffix }}</span>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <span class="no-suffixes">Yok</span>
+                            {% endif %}
+                        </div>
+                    </article>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+        </main>
+    </div>
+</body>
+</html>
