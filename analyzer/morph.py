@@ -1,4 +1,6 @@
-from MorphologicalAnalysis.FsmMorphologicalAnalyzer import FsmMorphologicalAnalyzer
+import sys
+sys.path.append('TurkishMorphologicalAnalysis')
+from TurkishMorphologicalAnalysis.MorphologicalAnalysis.FsmMorphologicalAnalyzer import FsmMorphologicalAnalyzer
 
 morphology = FsmMorphologicalAnalyzer()
 
