@@ -206,26 +206,26 @@ def get_suffix_display_info(suffix):
         "üş": "İşteşlik Eki",
         
         # Yönelme durumu ekleri
-        "e": "Yönelme Durumu",
-        "a": "Yönelme Durumu",
+        "e": "Yönelme Eki",
+        "a": "Yönelme Eki",
         
         # Belirtme durumu ekleri
-        "i": "Belirtme Durumu",
-        "ı": "Belirtme Durumu",
-        "u": "Belirtme Durumu",
-        "ü": "Belirtme Durumu",
+        "i": "Belirtme Eki",
+        "ı": "Belirtme Eki",
+        "u": "Belirtme Eki",
+        "ü": "Belirtme Eki",
         
         # Bulunma durumu ekleri
-        "de": "Bulunma Durumu",
-        "da": "Bulunma Durumu",
-        "te": "Bulunma Durumu",
-        "ta": "Bulunma Durumu",
+        "de": "Bulunma Eki",
+        "da": "Bulunma Eki",
+        "te": "Bulunma Eki",
+        "ta": "Bulunma Eki",
         
         # Ayrılma durumu ekleri
-        "den": "Ayrılma Durumu",
-        "dan": "Ayrılma Durumu",
-        "ten": "Ayrılma Durumu",
-        "tan": "Ayrılma Durumu",
+        "den": "Ayrılma Eki",
+        "dan": "Ayrılma Eki",
+        "ten": "Ayrılma Eki",
+        "tan": "Ayrılma Eki",
         
         # Ek eylem ekleri
         "dir": "Ek Eylem",
@@ -285,13 +285,13 @@ def get_suffix_display_info(suffix):
     # Tek anlamlı ekler için
     if suffix in single_meanings:
         meaning = single_meanings[suffix]
-        return f"-{suffix} : {meaning}", f"Teknik Kod: {suffix.upper()}"
+        return f"-{suffix} : {meaning}", meaning
     
     # Çok anlamlı ekler için
     elif suffix in multi_meanings:
         meanings = multi_meanings[suffix]
         display_text = f"-{suffix} : " + " / ".join(meanings)
-        return display_text, f"Teknik Kod: {suffix.upper()}"
+        return display_text, meanings[0]  # İlk anlamı tooltip_text olarak kullan
     
     # Özel breakdown ekleri için
     if suffix == 'y (kaynaştırma)':
@@ -299,4 +299,4 @@ def get_suffix_display_info(suffix):
     
     # Bilinmeyen ekler için
     else:
-        return f"-{suffix} : {suffix}", f"Teknik Kod: {suffix.upper()}"
+        return f"-{suffix} : {suffix}", suffix
