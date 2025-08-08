@@ -115,120 +115,34 @@
     </div>
 
     <script>
+        // Suffix açıklamalarını yükle
+        let suffixExplanations = {};
+        
+        // JSON dosyasını yükle
+        fetch('/static/suffix_explanations.json')
+            .then(response => response.json())
+            .then(data => {
+                suffixExplanations = data;
+            })
+            .catch(error => {
+                console.error('Suffix açıklamaları yüklenemedi:', error);
+            });
+        
         function showSuffixModal(suffix, meaning, displayText, tooltipText) {
             const modal = document.getElementById('suffixModal');
             const modalTitle = document.getElementById('modalTitle');
             const modalContent = document.getElementById('modalContent');
             
-            // Özel açıklamalar
+            // JSON'dan açıklama al
             let explanation = '';
             let title = displayText;
             
-            if (meaning === 'Tamlanan Eki') {
-                title = 'Tamlanan Eki (-sı, -si, -su, -sü) - Açıklama';
-                explanation = `
-                    <div class="suffix-explanation">
-                        <div class="explanation-section">
-                            <h4>Tamlanan Eki Nedir?</h4>
-                            <p><strong>Tanım:</strong> Tamlanan eki, isim tamlamalarında tamlanan (ikinci) kısmı belirten eklerdir. Bu ekler, bir ismin başka bir isme ait olduğunu gösterir ve sahiplik ilişkisi kurar.</p>
-                            <p><strong>Dilbilimsel Adı:</strong> İyelik eki (Possessive suffix)</p>
-                            <p><strong>Ek Şekilleri:</strong> -sı, -si, -su, -sü (ünlü uyumuna göre değişir)</p>
-                            <p><strong>Kullanım Amacı:</strong> İki isim arasında sahiplik, aitlik ilişkisi kurmak</p>
-                        </div>
-                        
-                        <div class="explanation-section">
-                            <h4>İsim Tamlaması Türleri ve Yapıları</h4>
-                            <div class="tamlamalar">
-                                <div class="tamlamalar-item">
-                                    <h5>1. Belirtili İsim Tamlaması</h5>
-                                    <p><strong>Yapı:</strong> Tamlayan + Tamlanan</p>
-                                    <p><strong>Özellik:</strong> Her iki kısımda da ek bulunur</p>
-                                    <ul>
-                                        <li><strong>ev-in kapı-sı</strong> → evin kapısı</li>
-                                    </ul>
-                                </div>
-                                
-                                <div class="tamlamalar-item">
-                                    <h5>2. Belirtisiz İsim Tamlaması</h5>
-                                    <p><strong>Yapı:</strong>  Tamlayan (ek yok) + Tamlanan</p>
-                                    <p><strong>Özellik:</strong> Tamlayan ek almaz; tamlanan tamlanan eki alır</p>
-                                    <ul>
-                                        <li><strong>ev kapı-sı</strong> → ev kapısı</li>
-                                    </ul>
-                                </div>
-                                
-                                <div class="tamlamalar-item">
-                                    <h5>3. Zincirleme İsim Tamlaması</h5>
-                                    <p><strong>Yapı:</strong> Tamlayan + Tamlanan + Tamlayan + Tamlanan</p>
-                                    <p><strong>Özellik:</strong> Birden fazla tamlama zincirleme olarak birleşir</p>
-                                    <ul>
-                                        <li><strong>okul müdür-ü-nün oda-sı</strong> → okul müdürünün odası</li>
-                                    </ul>
-                                </div>
-                                
-                                <div class="tamlamalar-item">
-                                    <h5>4. Takısız İsim Tamlaması</h5>
-                                    <p><strong>Yapı:</strong> Tamlayan (ek yok) + Tamlanan (ek yok)</p>
-                                    <p><strong>Özellik:</strong> Hiçbir kısımda ek bulunmaz</p>
-                                    <ul>
-                                        <li><strong>çelik kapı</strong> (çelik + kapı)</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="explanation-section">
-                            <h4>Ek Kuralları ve Dilbilimsel Kurallar</h4>
-                            <div class="rules">
-                                <div class="rule-item">
-                                    <h5>1. Büyük Ünlü Uyumu Kuralı</h5>
-                                    <p>Tamlanan eki, kelimenin son ünlüsüne göre değişir:</p>
-                                    <ul>
-                                        <li><strong>a, ı</strong> → <strong>-sı</strong> (kitap → kitab-ı)</li>
-                                        <li><strong>e, i</strong> → <strong>-si</strong> (ev → ev-i)</li>
-                                        <li><strong>o, u</strong> → <strong>-su</strong> (okul → okul-u)</li>
-                                        <li><strong>ö, ü</strong> → <strong>-sü</strong> (göz → göz-ü)</li>
-                                    </ul>
-                                    <p><strong>Kural:</strong> Son ünlü kalınsa kalın, inceyse ince ek gelir</p>
-                                </div>
-                                
-                                <div class="rule-item">
-                                    <h5>2. Tamlayan Eki ile Birlikte Kullanım</h5>
-                                    <p>Tamlanan eki genellikle tamlayan eki (-in, -ın, -un, -ün) ile birlikte kullanılır:</p>
-                                    <ul>
-                                        <li><strong>ev-in kapı-sı</strong> → evin kapısı</li>
-                                    </ul>
-                                    <p><strong>Önemli:</strong> Tamlayan eki olmadan da kullanılabilir (özellikle konuşma dilinde)</p>
-                                </div>
-                                
-                                <div class="rule-item">
-                                    <h5>3. Kaynaştırma Harfi Kuralları</h5>
-                                    <p>Bazı kelimelerde kaynaştırma harfi eklenir veya ses değişimi olur:</p>
-                                    <ul>
-                                        <li><strong>p → b</strong> (kitap → kitab-ı)</li>
-                                        <li><strong>ç → c</strong> (ağaç → ağac-ı)</li>
-                                        <li><strong>k → g/ğ</strong> (renk → reng-i, tavuk → tavuğ-u)</li>
-                                        <li><strong>t → d</strong> (yurt → yurd-u)</li>
-                                        <li><strong>y kaynaştırma</strong> (su → su-yu)</li>
-                                        <li><strong>n kaynaştırma</strong> (bu → bu-nu)</li>
-                                    </ul>
-                                    <p><strong>Kural:</strong> Sert ünsüzler yumuşar, ünlü ile başlayan ekler için kaynaştırma harfi eklenir</p>
-                                </div>
-                                
-                                <div class="rule-item">
-                                    <h5>4. Çoğul + Tamlanan Eki Kullanımı</h5>
-                                    <p>Çoğul eklerinden sonra tamlanan eki kullanılabilir:</p>
-                                    <ul>
-                                        <li><strong>ev-ler-in kapı-lar-ı</strong> → evlerin kapıları</li>
-                                    </ul>
-                                    <p><strong>Kural:</strong> Çoğul eki + tamlayan eki + çoğul eki + tamlanan eki</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
+            if (suffixExplanations[meaning]) {
+                // Özel açıklama var
+                title = suffixExplanations[meaning].title;
+                explanation = suffixExplanations[meaning].content;
             } else {
-                // Diğer ekler için genel açıklama
+                // Genel açıklama
                 explanation = `
                     <div class="suffix-explanation">
                         <h4>${displayText}</h4>
