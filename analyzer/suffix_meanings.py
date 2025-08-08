@@ -102,6 +102,10 @@ def get_suffix_display_info(suffix):
     Suffix için görüntüleme bilgilerini döndürür.
     Returns: (display_text, tooltip_text)
     """
+    # Tamlanan eki özel kontrolü
+    if suffix in ['sı', 'si', 'su', 'sü']:
+        return f"-{suffix} : tamlanan", "Tamlanan Eki"
+    
     # Tek anlamlı ekler
     single_meanings = {
         # Geçmiş zaman ekleri
@@ -288,6 +292,10 @@ def get_suffix_display_info(suffix):
         meanings = multi_meanings[suffix]
         display_text = f"-{suffix} : " + " / ".join(meanings)
         return display_text, f"Teknik Kod: {suffix.upper()}"
+    
+    # Özel breakdown ekleri için
+    if suffix == 'y (kaynaştırma)':
+        return '-y : kaynaştırma harfi', 'Kaynaştırma Harfi'
     
     # Bilinmeyen ekler için
     else:

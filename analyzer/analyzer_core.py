@@ -72,7 +72,7 @@ def get_morphological_breakdown(word, root, surface_suffix):
     """
     # Özel kelime düzeltmeleri - en başta kontrol et
     if word == 'edilmeyecektir':
-        return 'et-il-me-yecek-tir'
+        return 'et-il-me-y-ecek-tir'
     if word == 'kesinlikle':
         return 'kesin-lik-le'
     if word == 'düzgün':
@@ -87,6 +87,17 @@ def get_morphological_breakdown(word, root, surface_suffix):
         return 'ile'
     if word == 've':
         return 've'
+    
+    # 1. tekil şahıs eki + çoğul eki durumları için özel kontrol
+    # halamlar -> hala-m-lar, babaannemler -> babaanne-m-ler
+    if word.endswith('lar') or word.endswith('ler'):
+        for plural_suffix in ['lar', 'ler']:
+            if word.endswith(plural_suffix):
+                before_plural = word[:-len(plural_suffix)]
+                # 1. tekil şahıs eki kontrolü (-m ile biten)
+                if before_plural.endswith('m'):
+                    potential_root = before_plural[:-1]  # -m'i çıkar
+                    return f"{potential_root}-m-{plural_suffix}"
     
     # Surface suffix boşsa, kelimeyi analiz et
     if not surface_suffix:
@@ -229,14 +240,14 @@ def get_morphological_breakdown(word, root, surface_suffix):
                 acak_suffix = suffix[2:]  # acak
                 return f"{potential_root}-{edilgen_suffix}-{acak_suffix}"
     
-    # Tamlanan eki düzeltmesi
+    # Tamlanan eki düzeltmesi - özel kontrol
     if word.endswith('sı') or word.endswith('si') or word.endswith('su') or word.endswith('sü'):
         for suffix in ['sı', 'si', 'su', 'sü']:
             if word.endswith(suffix):
                 potential_root = word[:-len(suffix)]
                 return f"{potential_root}-{suffix}"
     
-    # Çoğul eki düzeltmesi
+    # Çoğul eki düzeltmesi - birleşik olarak kalmalı
     if word.endswith('lar') or word.endswith('ler'):
         for suffix in ['lar', 'ler']:
             if word.endswith(suffix):
@@ -306,8 +317,8 @@ def get_morphological_breakdown(word, root, surface_suffix):
         ('in', 'i-n'), ('ın', 'ı-n'), ('un', 'u-n'), ('ün', 'ü-n'),
         ('i', 'i'), ('ı', 'ı'), ('u', 'u'), ('ü', 'ü'),
 
-        # Çoğul ekleri
-        ('ler', 'le-r'), ('lar', 'la-r'),
+        # Çoğul ekleri - birleşik olarak kalmalı
+        ('ler', 'ler'), ('lar', 'lar'),
 
         # Sıfat ve isim yapım ekleri
         ('li', 'li'), ('lı', 'lı'), ('lu', 'lu'), ('lü', 'lü'),
@@ -329,9 +340,24 @@ def get_morphological_breakdown(word, root, surface_suffix):
                 # Pattern'i bulduk, ekle
                 if breakdown != pattern:  # Eğer ayrım varsa
                     parts = breakdown.split('-')
-                    breakdown_parts.extend(parts)
+                    for part in parts:
+                        # -y kaynaştırma kontrolü
+                        if part == 'y' or (part.startswith('y') and len(part) == 2 and part[1] in 'aeıioöuü'):
+                            breakdown_parts.append('y (kaynaştırma)')
+                        # -sı tamlanan kontrolü
+                        elif part in ['sı', 'si', 'su', 'sü']:
+                            breakdown_parts.append(part)
+                        else:
+                            breakdown_parts.append(part)
                 else:
-                    breakdown_parts.append(pattern)
+                    # -y kaynaştırma kontrolü
+                    if pattern == 'y' or (pattern.startswith('y') and len(pattern) == 2 and pattern[1] in 'aeıioöuü'):
+                        breakdown_parts.append('y (kaynaştırma)')
+                    # -sı tamlanan kontrolü
+                    elif pattern in ['sı', 'si', 'su', 'sü']:
+                        breakdown_parts.append(pattern)
+                    else:
+                        breakdown_parts.append(pattern)
                 
                 remaining_suffix = remaining_suffix[len(pattern):]
                 found_pattern = True
@@ -339,7 +365,14 @@ def get_morphological_breakdown(word, root, surface_suffix):
         
         if not found_pattern:
             # Pattern bulunamadıysa, ilk harfi al
-            breakdown_parts.append(remaining_suffix[0])
+            if remaining_suffix[0] == 'y':
+                breakdown_parts.append('y (kaynaştırma)')
+            elif remaining_suffix[:2] in ['sı', 'si', 'su', 'sü']:
+                breakdown_parts.append(remaining_suffix[:2])
+                remaining_suffix = remaining_suffix[2:]
+                continue
+            else:
+                breakdown_parts.append(remaining_suffix[0])
             remaining_suffix = remaining_suffix[1:]
     
     return '-'.join(breakdown_parts)
@@ -430,7 +463,7 @@ def analyze_sentence(sentence):
                             display_text, tooltip_text = get_suffix_display_info(part)
                             breakdown_suffixes.append({
                                 "suffix": part,
-                                "meaning": get_suffix_meaning(part),
+                                "meaning": tooltip_text,  # tooltip_text ile aynı yap
                                 "display_text": display_text,
                                 "tooltip_text": tooltip_text
                             })
