@@ -39,7 +39,7 @@ def is_meaningful_suffix(suffix, meaning):
     Suffix'in anlamlı olup olmadığını kontrol eder.
     """
     # Gösterilmeyecek suffix türleri
-    exclude_types = ['İsim', 'Fiil', 'Sıfat', 'Olumlu', 'Olumsuz', 'Mastar', 'Sıfat-Fiil', 'İsim-Fiil', 'QUES', 'DET', 'PROP']
+    exclude_types = ['İsim', 'Fiil', 'Sıfat', 'Yalın', 'Olumlu', 'Olumsuz', 'Mastar', 'Sıfat-Fiil', 'İsim-Fiil', 'QUES', 'DET', 'PROP']
     
     # Eğer meaning exclude listesinde varsa, anlamlı değil
     for exclude_type in exclude_types:
@@ -57,7 +57,7 @@ def is_meaningful_suffix(suffix, meaning):
                        '1. Tekil Kişi', '2. Tekil Kişi', '3. Tekil Kişi',
                        '1. Çoğul Kişi', '2. Çoğul Kişi', '3. Çoğul Kişi',
                        '1. Tekil Sahip', '2. Tekil Sahip', '3. Tekil Sahip', 'Sahipsiz',
-                       'Yalın', 'Mastar', 'İsimden İsim Yapma Eki']
+                       'Mastar', 'İsimden İsim Yapma Eki']
     
     for meaningful_type in meaningful_types:
         if meaningful_type in meaning:
@@ -99,7 +99,8 @@ def get_morphological_breakdown(word, root, surface_suffix):
         return 'gir-mez'  # -mez geniş zamanda olumsuzluk eki, ayrılmamalı
     if word == 'isim':
         return 'isim'  # isim kelimesi kök olarak kalmalı, ayrılmamalı
-    
+    if word == 'sözcük':
+        return 'söz-cük'
     # 1. tekil şahıs eki + çoğul eki durumları için özel kontrol
     # halamlar -> hala-m-lar, babaannemler -> babaanne-m-ler
     if word.endswith('lar') or word.endswith('ler'):
