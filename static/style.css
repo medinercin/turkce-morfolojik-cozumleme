@@ -1097,3 +1097,73 @@ body {
     }
 }
 
+/* Çok anlamlı ekler için direkt butonlar */
+.meaning-buttons {
+    background-color: #f8f9fa;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+}
+
+.meaning-buttons h5 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #495057;
+    font-weight: 600;
+}
+
+.meaning-button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.meaning-btn {
+    background-color: #e9ecef;
+    color: #495057;
+    border: 1px solid #ced4da;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.meaning-btn:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.meaning-btn.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+@media (prefers-color-scheme: dark) {
+    .meaning-buttons {
+        background-color: #2d3748;
+        border-color: #4a5568;
+    }
+    
+    .meaning-buttons h5 {
+        color: #a0aec0;
+    }
+    
+    .meaning-btn {
+        background-color: #4a5568;
+        color: #a0aec0;
+        border-color: #718096;
+    }
+    
+    .meaning-btn:hover,
+    .meaning-btn.active {
+        background-color: #3182ce;
+        color: white;
+        border-color: #3182ce;
+    }
+}
+

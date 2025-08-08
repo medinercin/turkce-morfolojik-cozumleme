@@ -117,6 +117,8 @@
     <script>
         // Suffix açıklamalarını yükle
         let suffixExplanations = {};
+        let currentMeanings = []; // Çok anlamlı ekler için
+        let currentMeaningIndex = 0; // Şu anki anlam indeksi
         
         // JSON dosyasını yükle
         fetch('/static/suffix_explanations.json')
@@ -133,7 +135,52 @@
             const modalTitle = document.getElementById('modalTitle');
             const modalContent = document.getElementById('modalContent');
             
-            // JSON'dan açıklama al
+            // Modal'ı baştan başlat - scroll pozisyonunu sıfırla
+            modalContent.scrollTop = 0;
+            
+            // Çok anlamlı ek kontrolü
+            if (displayText.includes(' / ')) {
+                // Çok anlamlı ek - anlamları ayır
+                currentMeanings = displayText.split(' / ').map(m => m.trim());
+                currentMeaningIndex = 0;
+                
+                // İlk anlamı göster
+                const firstMeaning = currentMeanings[0];
+                showMeaning(firstMeaning, suffix, displayText);
+            } else {
+                // Tek anlamlı ek
+                currentMeanings = [];
+                currentMeaningIndex = 0;
+                
+                let explanation = '';
+                let title = displayText;
+                
+                if (suffixExplanations[meaning]) {
+                    // Özel açıklama var
+                    title = suffixExplanations[meaning].title;
+                    explanation = suffixExplanations[meaning].content;
+                } else {
+                    // Genel açıklama
+                    explanation = `
+                        <div class="suffix-explanation">
+                            <h4>${displayText}</h4>
+                            <p><strong>Anlam:</strong> ${tooltipText}</p>
+                            <p><strong>Teknik Kod:</strong> ${suffix.toUpperCase()}</p>
+                        </div>
+                    `;
+                }
+                
+                modalTitle.textContent = title;
+                modalContent.innerHTML = explanation;
+            }
+            
+            modal.style.display = 'block';
+        }
+        
+        function showMeaning(meaning, suffix, displayText) {
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            
             let explanation = '';
             let title = displayText;
             
@@ -146,27 +193,63 @@
                 explanation = `
                     <div class="suffix-explanation">
                         <h4>${displayText}</h4>
-                        <p><strong>Anlam:</strong> ${tooltipText}</p>
+                        <p><strong>Anlam:</strong> ${meaning}</p>
                         <p><strong>Teknik Kod:</strong> ${suffix.toUpperCase()}</p>
                     </div>
                 `;
             }
             
+            // Çok anlamlı ekler için direkt butonlar ekle
+            if (currentMeanings.length > 1) {
+                const meaningButtons = `
+                    <div class="meaning-buttons">
+                        <h5>Bu ekin farklı anlamları:</h5>
+                        <div class="meaning-button-container">
+                            ${currentMeanings.map((meaningName, index) => `
+                                <button onclick="showMeaningByIndex(${index})" 
+                                        class="meaning-btn ${index === currentMeaningIndex ? 'active' : ''}">
+                                    ${meaningName}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                explanation = meaningButtons + explanation;
+            }
+            
             modalTitle.textContent = title;
             modalContent.innerHTML = explanation;
-            modal.style.display = 'block';
+        }
+        
+        function showMeaningByIndex(index) {
+            if (index >= 0 && index < currentMeanings.length) {
+                currentMeaningIndex = index;
+                showMeaning(currentMeanings[index], '', '');
+            }
         }
         
         function closeSuffixModal() {
             const modal = document.getElementById('suffixModal');
+            const modalContent = document.getElementById('modalContent');
             modal.style.display = 'none';
+            // Modal kapandığında durumu sıfırla
+            currentMeanings = [];
+            currentMeaningIndex = 0;
+            // Scroll pozisyonunu sıfırla
+            modalContent.scrollTop = 0;
         }
         
         // Modal dışına tıklandığında kapatma
         window.onclick = function(event) {
             const modal = document.getElementById('suffixModal');
+            const modalContent = document.getElementById('modalContent');
             if (event.target === modal) {
                 modal.style.display = 'none';
+                // Modal kapandığında durumu sıfırla
+                currentMeanings = [];
+                currentMeaningIndex = 0;
+                // Scroll pozisyonunu sıfırla
+                modalContent.scrollTop = 0;
             }
         }
     </script>
