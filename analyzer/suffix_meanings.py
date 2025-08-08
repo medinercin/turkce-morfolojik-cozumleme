@@ -177,6 +177,10 @@ def get_suffix_display_info(suffix):
         "me": "İsim-Fiil Eki",
         "ma": "İsim-Fiil Eki",
         
+        # Geniş zamanda olumsuzluk ekleri
+        "maz": "Geniş Zamanın Olumsuzluk Eki",
+        "mez": "Geniş Zamanın Olumsuzluk Eki",
+        
         # Sıfat-fiil ekleri
         "en": "Sıfat-Fiil Eki",
         "an": "Sıfat-Fiil Eki",
@@ -186,6 +190,8 @@ def get_suffix_display_info(suffix):
         "ıp": "Zarf-Fiil Eki",
         "up": "Zarf-Fiil Eki",
         "üp": "Zarf-Fiil Eki",
+        "arak": "Zarf-Fiil Eki",
+        "erek": "Zarf-Fiil Eki",
         
         # Edilgen ekleri
         "ıl": "Edilgen Eki",

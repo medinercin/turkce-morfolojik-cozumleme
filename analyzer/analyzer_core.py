@@ -88,6 +88,18 @@ def get_morphological_breakdown(word, root, surface_suffix):
     if word == 've':
         return 've'
     
+    # Yeni düzeltmeler - kullanıcının belirttiği hatalar
+    if word == 'belirtisiz':
+        return 'belir-ti-siz'  # belirmek fiilinden belir kök, -ti fiilden isim, -siz olumsuzluk
+    if word == 'olarak':
+        return 'ol-arak'  # -arak zarf-fiil eki, ayrılmamalı
+    if word == 'bulunmaktadır':
+        return 'bulun-mak-ta-dır'  # bulunmak mastar + -ta bulunma durumu + -dır ek eylem
+    if word == 'girmez':
+        return 'gir-mez'  # -mez geniş zamanda olumsuzluk eki, ayrılmamalı
+    if word == 'isim':
+        return 'isim'  # isim kelimesi kök olarak kalmalı, ayrılmamalı
+    
     # 1. tekil şahıs eki + çoğul eki durumları için özel kontrol
     # halamlar -> hala-m-lar, babaannemler -> babaanne-m-ler
     if word.endswith('lar') or word.endswith('ler'):
@@ -293,8 +305,14 @@ def get_morphological_breakdown(word, root, surface_suffix):
         # İşteşlik ekleri - ayrılmamalı
         ('ış', 'ış'), ('iş', 'iş'), ('uş', 'uş'), ('üş', 'üş'),
         
+        # Geniş zamanda olumsuzluk ekleri - ayrılmamalı (en uzun önce)
+        ('mez', 'mez'), ('maz', 'maz'),
+        
         # İsim-fiil ekleri - ayrılmamalı
         ('me', 'me'), ('ma', 'ma'),
+        
+        # Zarf-fiil ekleri - ayrılmamalı
+        ('arak', 'arak'), ('erek', 'erek'), ('dığında', 'dığında'),
         
         # Sıfat-fiil ekleri
         ('miyor', 'mi-yor'), ('mıyordu', 'mı-yor-du'),
@@ -322,9 +340,12 @@ def get_morphological_breakdown(word, root, surface_suffix):
 
         # Sıfat ve isim yapım ekleri
         ('li', 'li'), ('lı', 'lı'), ('lu', 'lu'), ('lü', 'lü'),
-        ('siz', 'si-z'), ('sız', 'sı-z'), ('suz', 'su-z'), ('süz', 'sü-z'),
+        ('siz', 'siz'), ('sız', 'sız'), ('suz', 'suz'), ('süz', 'süz'),  # Olumsuzluk ekleri - ayrılmamalı
         ('ci', 'ci'), ('cı', 'cı'), ('cu', 'cu'), ('cü', 'cü'),
         ('lik', 'li-k'), ('lık', 'lı-k'), ('luk', 'lu-k'), ('lük', 'lü-k'),
+        
+        # Fiilden isim yapma ekleri
+        ('ti', 'ti'), ('tı', 'tı'), ('tu', 'tu'), ('tü', 'tü'),
 
         # Basit ekler
         ('a', 'a'), ('e', 'e'), ('ı', 'ı'), ('i', 'i'), ('o', 'o'), ('ö', 'ö'), ('u', 'u'), ('ü', 'ü'),
