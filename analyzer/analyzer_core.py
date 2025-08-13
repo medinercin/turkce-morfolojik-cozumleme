@@ -101,6 +101,16 @@ def get_morphological_breakdown(word, root, surface_suffix):
         return 'isim'  # isim kelimesi kök olarak kalmalı, ayrılmamalı
     if word == 'sözcük':
         return 'söz-cük'
+    if word == 'okula':
+        return 'okul-a'
+    if word == 'sevilmek':
+        return 'sev-il-mek'
+    if word == 'şeydir':
+        return 'şey-dir'
+    
+    if word == 'önce':
+        return 'ön-ce'
+    
     # 1. tekil şahıs eki + çoğul eki durumları için özel kontrol
     # halamlar -> hala-m-lar, babaannemler -> babaanne-m-ler
     if word.endswith('lar') or word.endswith('ler'):
@@ -254,8 +264,8 @@ def get_morphological_breakdown(word, root, surface_suffix):
                 return f"{potential_root}-{edilgen_suffix}-{acak_suffix}"
     
     # Tamlanan eki düzeltmesi - özel kontrol
-    if word.endswith('sı') or word.endswith('si') or word.endswith('su') or word.endswith('sü'):
-        for suffix in ['sı', 'si', 'su', 'sü']:
+    if word.endswith('sı') or word.endswith('si') or word.endswith('su') or word.endswith('sü') or word.endswith('nin'):
+        for suffix in ['sı', 'si', 'su', 'sü', 'nin']:
             if word.endswith(suffix):
                 potential_root = word[:-len(suffix)]
                 return f"{potential_root}-{suffix}"
